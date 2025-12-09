@@ -1,18 +1,18 @@
-import { fileURLToPath, URL } from 'node:url'
-
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import vueDevTools from 'vite-plugin-vue-devtools'
+import { resolve } from 'path'
 
-// https://vite.dev/config/
+// 仓库名（项目页会部署到 https://<user>.github.io/<repo>/）
+const repoName = 'canvas-demo'
+const isGitHubPages = process.env.DEPLOY_ENV === 'github-pages' || process.env.CI === 'true'
+
+// 若为项目页（canvas-demo），生产环境下 base 应该是 /canvas-demo/
 export default defineConfig({
-  plugins: [
-    vue(),
-    vueDevTools(),
-  ],
+  base: isGitHubPages ? `/${repoName}/` : '/',
+  plugins: [vue()],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': resolve(__dirname, 'src'),
     },
   },
 })
